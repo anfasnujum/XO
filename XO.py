@@ -93,10 +93,10 @@ def playgame(board,turn):
 			if tempboard.input(point[0],point[1],turn) == 1:
 				j = 1
 				tempboard.changeturn()
-	if tempboard.check() == turn:
-		return point1
-	else:
-		return None
+		if tempboard.check() == turn:
+			return point1
+		else:
+			return None
 
 def compplay(board,turn,accuracy):
 	scoreboard = [[0,0,0],[0,0,0],[0,0,0]]
@@ -104,6 +104,7 @@ def compplay(board,turn,accuracy):
 		point = playgame(board,turn)
 		if point != None:
 			scoreboard[point[0]][point[1]] += 1
+		
 	max =[[0,0],0]
 	for i in range(0,3):
 		for j in range(0,3):
@@ -111,12 +112,16 @@ def compplay(board,turn,accuracy):
 				max[0][0]=i
 				max[0][1]=j
 				max[1]=scoreboard[i][j]
+	print(scoreboard)
 	return max[0]
 
 def playerinput():
 	point =[0,0]
 	pointin = input("Enter the row and column seperated by space:")
 	point = list(map(int,pointin.split(" ")))
+	if point[0] not in range(0,3):
+		if point[1] not in range(0,3):
+			point = playerinput()
 	return point
 
 
