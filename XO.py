@@ -7,16 +7,16 @@ class XO:
 		self.board = [[0,0,0],[0,0,0],[0,0,0]]
 		self.turn = 1
 
-	def input(self,row,column,turn):
+	def input(self,row,column):
 		if self.board[row][column] == 0:
-			if turn == 1:
+			if self.turn == 1:
 				self.board[row][column] = 1
-			elif turn == -1:
+			elif self.turn == -1:
 				self.board[row][column] = -1
 			self.changeturn()
-			return 1
+			return True
 		else:
-			return 0
+			return False
 
 	def check(self):
 		# rows
@@ -70,19 +70,19 @@ def generatepoint():
 	return point
 
 #Function to play game and return if the first player wins
-def playgame(board,turn):
+def playgame(board):
 	tempboard = copy.deepcopy(board)
+	turn = board.turn
 	no_of_turns = 0
 	for i in range(0,3):
 		no_of_turns += tempboard.board[i].count(0)
-
 	i = 0
 
 	while i ==0:
 		point1 = generatepoint()
-		if tempboard.input(point1[0],point1[1],turn) == 1:
+		if tempboard.input(point1[0],point1[1]):
 			i = 1
-			tempboard.changeturn()
+	#		tempboard.changeturn()
 
 
 	for i in range(0,no_of_turns-1):
@@ -90,21 +90,20 @@ def playgame(board,turn):
 		j=0
 		while j==0:
 			point = generatepoint()
-			if tempboard.input(point[0],point[1],turn) == 1:
+			if tempboard.input(point[0],point[1]):
 				j = 1
-				tempboard.changeturn()
+	#			tempboard.changeturn()
 		if tempboard.check() == turn:
 			return point1
-		else:
-			return None
+	return None
 
-def compplay(board,turn,accuracy):
+def compplay(board,accuracy):
 	scoreboard = [[0,0,0],[0,0,0],[0,0,0]]
 	for i in range(0,accuracy):
-		point = playgame(board,turn)
+		point = playgame(board)
 		if point != None:
 			scoreboard[point[0]][point[1]] += 1
-		
+
 	max =[[0,0],0]
 	for i in range(0,3):
 		for j in range(0,3):
@@ -112,7 +111,6 @@ def compplay(board,turn,accuracy):
 				max[0][0]=i
 				max[0][1]=j
 				max[1]=scoreboard[i][j]
-	print(scoreboard)
 	return max[0]
 
 def playerinput():
@@ -137,21 +135,24 @@ elif playercoin == "O":
 
 board = XO()
 board.show()
+print(board.turn)
 print("_______________________")
 point = [0,0]
 
 	#first turn
 if playercoin == "O":
 	print("Computer's Turn:")
-	point = compplay(board,board.turn,accuracy)
-	board.input(point[0],point[1],1)
+	point = compplay(board,accuracy)
+	board.input(point[0],point[1])
+	print(board.turn)
 	board.show()
 	print("Computer played:",point)
 
 elif playercoin == "X":
 	print("Your Turn:")
 	point = playerinput()
-	board.input(point[0],point[1],1)
+	board.input(point[0],point[1])
+	print(board.turn)
 	board.show()
 	print("You played:",point)
 print("_______________________")
@@ -162,18 +163,19 @@ for i in range(0,7):
 		k=0
 		while k == 0:
 			point = playerinput()
-			if board.input(point[0],point[1],board.turn) == 1:
+			if board.input(point[0],point[1]):
 				k = 1
 		print("You played:",point)
 
 	else:
 		print("Computer's Turn:")
-		point = compplay(board,board.turn,accuracy)
+		point = compplay(board,accuracy)
 		k=0
 		while k ==0:
-			if board.input(point[0],point[1],board.turn) == 1:
+			if board.input(point[0],point[1]):
 				k=1
 		print("Computer played:",point)
+	print(board.turn)
 	board.show()
 	print("_______________________")
 	if board.check() == playerturn:
