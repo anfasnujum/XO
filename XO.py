@@ -49,9 +49,6 @@ class XO:
 
 		return 0
 
-	def copy(self):
-		return self
-
 	def show(self):
 		for i in range(0,3):
 			print(self.board[i])
@@ -97,6 +94,7 @@ def playgame(board):
 			return point1
 	return None
 
+#Function that makes the computer play acc to accuracy required
 def compplay(board,accuracy):
 	scoreboard = [[0,0,0],[0,0,0],[0,0,0]]
 	for i in range(0,accuracy):
@@ -135,7 +133,6 @@ elif playercoin == "O":
 
 board = XO()
 board.show()
-print(board.turn)
 print("_______________________")
 point = [0,0]
 
@@ -144,7 +141,6 @@ if playercoin == "O":
 	print("Computer's Turn:")
 	point = compplay(board,accuracy)
 	board.input(point[0],point[1])
-	print(board.turn)
 	board.show()
 	print("Computer played:",point)
 
@@ -152,7 +148,6 @@ elif playercoin == "X":
 	print("Your Turn:")
 	point = playerinput()
 	board.input(point[0],point[1])
-	print(board.turn)
 	board.show()
 	print("You played:",point)
 print("_______________________")
@@ -175,7 +170,6 @@ for i in range(0,7):
 			if board.input(point[0],point[1]):
 				k=1
 		print("Computer played:",point)
-	print(board.turn)
 	board.show()
 	print("_______________________")
 	if board.check() == playerturn:
